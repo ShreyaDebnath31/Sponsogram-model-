@@ -9,7 +9,6 @@ CORS(app)  # Enable CORS for all routes
 # Load the saved model
 with open('light_gbm2.pkl', 'rb') as f:
     model = pickle.load(f)
-
 with open('scaler.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
@@ -24,9 +23,9 @@ def predict():
     prediction = model.predict(input_features)
     
     budget = data['budget']
-    roi = (prediction - budget) / budget
+    roi = (prediction[0] - budget) / budget  # Use prediction[0] instead of prediction
     
-    return jsonify({"roi": roi})
+    return jsonify({"roi": float(roi)})  # Convert to float for JSON serialization
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
